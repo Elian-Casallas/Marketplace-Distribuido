@@ -1,0 +1,118 @@
+version: '3.9'
+
+services:
+  # ============================
+  # 🌐 NODE 0: API PRINCIPAL
+  # ============================
+  main-api:
+    build: ./marketplace-api
+    container_name: main-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./marketplace-api/.env
+    depends_on:
+      - mongo_main
+    networks:
+      - marketplace_net
+
+  mongo_main:
+    image: mongo:6
+    container_name: mongo_main
+    ports:
+      - "27020:27017"
+    volumes:
+      - mongo_main_data:/data/db
+    networks:
+      - marketplace_net
+
+  # ============================
+  # ⚡ NODE 1: ELECTRONICS
+  # ============================
+  electronics-app:
+    build: ./marketplace-electronics
+    container_name: electronics-app
+    ports:
+      - "8001:8000"
+    env_file:
+      - ./marketplace-electronics/.env
+    depends_on:
+      - mongo_electronics
+    networks:
+      - marketplace_net
+
+  mongo_electronics:
+    image: mongo:6
+    container_name: mongo_electronics
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_electronics_data:/data/db
+    networks:
+      - marketplace_net
+
+  # ============================
+  # 👕 NODE 2: CLOTHES
+  # ============================
+  clothes-app:
+    build: ./marketplace-clothes
+    container_name: clothes-app
+    ports:
+      - "8002:8000"
+    env_file:
+      - ./marketplace-clothes/.env
+    depends_on:
+      - mongo_clothes
+    networks:
+      - marketplace_net
+
+  mongo_clothes:
+    image: mongo:6
+    container_name: mongo_clothes
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_clothes_data:/data/db
+    networks:
+      - marketplace_net
+
+  # ============================
+  # 🏠 NODE 3: HOME
+  # ============================
+  home-app:
+    build: ./marketplace-home
+    container_name: home-app
+    ports:
+      - "8003:8000"
+    env_file:
+      - ./marketplace-home/.env
+    depends_on:
+      - mongo_home
+    networks:
+      - marketplace_net
+
+  mongo_home:
+    image: mongo:6
+    container_name: mongo_home
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongo_home_data:/data/db
+    networks:
+      - marketplace_net
+
+# ============================
+# 📦 VOLUMES PERSISTENTES
+# ============================
+volumes:
+  mongo_main_data:
+  mongo_electronics_data:
+  mongo_clothes_data:
+  mongo_home_data:
+
+# ============================
+# 🌍 RED COMPARTIDA
+# ============================
+networks:
+  marketplace_net:
+    driver: bridge
