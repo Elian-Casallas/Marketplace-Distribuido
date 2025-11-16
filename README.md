@@ -1,8 +1,9 @@
 # Marketplace Distribuido
 
-Repositorio monolítico que contiene el backend (main + nodos) y la carpeta base del frontend.
+> Repositorio monolítico que contiene el backend (main + nodos) y la carpeta base del frontend.
 
-Estructura del repositorio
+## Estructura del repositorio
+```
 /Backend/
    main-api/
    electronics-api/
@@ -15,10 +16,13 @@ Estructura del repositorio
 
 README.md
 docs/
+```
 
-Nota: Cada microservicio (main-api, electronics-api, clothes-api, home-api) ya incluye su propio Dockerfile, .env.example y .gitignore. El docker-compose.yml en /Backend levanta todos los servicios.
+> **Nota**: Cada microservicio (`main-api`, `electronics-api`, `clothes-api`, `home-api`) ya incluye su propio `Dockerfile`, `.env.example` y `.gitignore`. El `docker-compose.yml` en `/Backend` levanta todos los servicios.
 
-Objetivo del proyecto
+---
+
+# Objetivo del proyecto
 
 Marketplace distribuido con nodos por categoría (electronics, clothes, home) y un gateway (main-api) que centraliza rutas y mantiene réplicas en MongoDB. Se implementaron replicación (fase 3) y sincronización con colas/cron/jobs (fase 4). Fase 5 (pruebas de tolerancia a fallos) completada. La Fase 6 (optimización y documentación) es lo que contiene este README/docs.
 
