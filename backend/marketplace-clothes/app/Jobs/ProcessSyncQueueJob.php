@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\SyncQueue;
+use App\Models\SyncEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
@@ -21,14 +21,15 @@ class ProcessSyncQueueJob implements ShouldQueue
         $mainUrl = env('MAIN_API_URL');
         $mainKey = env('MAIN_API_KEY');
 
-        $pending = SyncQueue::where('status', 'pending')->get();
+        $pending = SyncEvent::whereIn('status', ['pending', 'failed'])->get();
 
         foreach ($pending as $item) {
             try {
+                Log::info("✅ Evento reenviado al main");
                 $response = Http::withHeaders([
                     'X-Internal-Key' => $mainKey,
                     'Accept' => 'application/json',
-                ])->post(rtrim($mainUrl, '/') . '/api/replicate', $item->payload);
+                ])->post(rtrim($mainUrl, '/') . '/api/replicate', $item);
 
                 if ($response->successful()) {
                     Log::info("✅ Synced pending event {$item->_id}");
