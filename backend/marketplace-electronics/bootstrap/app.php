@@ -19,8 +19,4 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })
-    ->withSchedule(function (Schedule $schedule) {
-        // 🕒 Programamos el comando cada 5 minutos
-        $schedule->command('sync:process-nodes')->everyFiveMinutes();
     })->create();

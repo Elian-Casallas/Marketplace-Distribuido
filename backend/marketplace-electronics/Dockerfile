@@ -12,5 +12,13 @@ COPY . .
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 RUN chmod -R 777 storage bootstrap/cache
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 8000
-CMD php artisan serve --host=0.0.0.0 --port=8000
+
+# —— Usar entrypoint ——
+ENTRYPOINT ["/entrypoint.sh"]
+
+# —— Esto se ejecutará después del entrypoint ——
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

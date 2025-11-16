@@ -24,6 +24,15 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 # Dar permisos al almacenamiento
 RUN chmod -R 777 storage bootstrap/cache
 
-# Exponer puerto y ejecutar Laravel
+# Copiar entruypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Exponer puerto
 EXPOSE 8000
-CMD php artisan serve --host=0.0.0.0 --port=8000
+
+# —— Usar entrypoint ——
+ENTRYPOINT ["/entrypoint.sh"]
+
+# —— Esto se ejecutará después del entrypoint ——
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

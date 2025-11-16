@@ -17,10 +17,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'internal.auth' => \App\Http\Middleware\InternalAuthMiddleware::class,
         ]);
     })
-    ->withSchedule(function (Schedule $schedule): void {
-        // 🕒 Programamos el comando cada 5 minutos
-        $schedule->command('sync:process-nodes')->everyFiveMinutes();
-    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

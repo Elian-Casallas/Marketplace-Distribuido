@@ -46,6 +46,7 @@ class ReplicationController extends Controller
             $repo = ReplicatedProduct::forCategory($category);
             switch ($action) {
                 case 'create':
+                    Log::info("🔁 Insertando producto enviado de {$category}");
                     // Si viene id, intentamos updateOrCreate por ese _id; si no viene, creamos nuevo documento
                     if ($id) {
                         $repo->updateOrCreate(
@@ -59,6 +60,7 @@ class ReplicationController extends Controller
 
                 case 'update':
                     // Update requiere id
+                    Log::info("🔁 Actualizando producto enviado de {$category}");
                     if (! $id) {
                         return response()->json(['error' => 'product id required for update'], 400);
                     }
