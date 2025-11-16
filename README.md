@@ -1,4 +1,4 @@
-Marketplace Distribuido
+# Marketplace Distribuido
 
 Repositorio monolítico que contiene el backend (main + nodos) y la carpeta base del frontend.
 
