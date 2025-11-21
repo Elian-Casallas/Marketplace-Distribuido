@@ -45,7 +45,7 @@ class ReplicateProductJob implements ShouldQueue
             $resp = Http::withHeaders([
                 'X-Internal-Key' => $mainKey,
                 'Accept' => 'application/json',
-            ])->post(rtrim($mainUrl, '/').'/api/replicate', $this->event);
+            ])->post(rtrim($mainUrl, '/')."/api/replicate", $this->event);
 
             if ($resp->successful()) {
                 Log::info("✅ Replicated event {$this->event['event_id']} to main-api");

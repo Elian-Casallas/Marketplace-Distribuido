@@ -45,7 +45,7 @@ class ProcessPendingReplicationsJob implements ShouldQueue
                 $resp = Http::withHeaders([
                     'X-Internal-Key' => $nodeKey,
                     'Accept' => 'application/json',
-                ])->post(rtrim($nodeUrl, '/') . '/api/replicate', $item->payload);
+                ])->post(rtrim($nodeUrl, '/') . "/api/replicate", $item->payload);
 
                 if ($resp->successful()) {
                     $item->delete();

@@ -1,1 +1,5 @@
 docker-compose.dev.yml
+/marketplace-api/
+/marketplace-clothes/
+/marketplace-electronics/
+/marketplace-home/

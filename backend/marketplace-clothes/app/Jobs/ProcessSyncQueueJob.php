@@ -29,7 +29,7 @@ class ProcessSyncQueueJob implements ShouldQueue
                 $response = Http::withHeaders([
                     'X-Internal-Key' => $mainKey,
                     'Accept' => 'application/json',
-                ])->post(rtrim($mainUrl, '/') . '/api/replicate', $item);
+                ])->post(rtrim($mainUrl, '/') . "/api/replicate", $item);
 
                 if ($response->successful()) {
                     Log::info("✅ Synced pending event {$item->_id}");

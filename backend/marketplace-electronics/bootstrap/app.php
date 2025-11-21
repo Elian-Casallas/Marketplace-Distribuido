@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule): void {
         // 🕒 Programamos el comando cada 5 minutos
-        $schedule->command('sync:process-node_electronics')->everyFiveMinutes();
+        $schedule->command('sync:process-node_electronics')->everyMinute();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

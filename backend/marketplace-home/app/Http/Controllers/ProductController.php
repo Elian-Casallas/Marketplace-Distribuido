@@ -45,6 +45,8 @@ class ProductController extends Controller
                 'description' => 'nullable|string',
                 'price' => 'required|numeric',
                 'stock' => 'nullable|integer',
+                'link' => 'sometimes|nullable|string',
+                'seller_id' => 'sometimes|nullable|string',
                 'category' => 'required|string',
                 'attributes' => 'nullable|array',
             ]);
@@ -103,6 +105,8 @@ class ProductController extends Controller
                 'description' => 'sometimes|nullable|string',
                 'price' => 'sometimes|required|numeric',
                 'stock' => 'sometimes|integer',
+                'link' => 'sometimes|nullable|string',
+                'seller_id' => 'sometimes|nullable|string',
                 'category' => 'sometimes|required|string',
                 'attributes' => 'sometimes|array',
             ]);
@@ -165,6 +169,32 @@ class ProductController extends Controller
         } catch (\Throwable $e) {
             Log::error("❌ (ProductController - destroy) Error al eliminar producto ID $id: " . $e->getMessage());
             return response()->json(['error' => 'Error interno al eliminar el producto.'], 500);
+        }
+    }
+
+    public function recommended($excludeId = null, $max = 20)
+    {
+        try {
+            Log::info("🔍 (ProductController - recommended) Obteniendo productos recomendados");
+
+            $query = Product::query();
+
+            // Excluir un producto si se pasa $excludeId
+            if ($excludeId) {
+                $query->where('id', '!=', $excludeId);
+            }
+
+            // Obtener productos aleatorios
+            $products = $query->limit($max)
+                            ->get();
+
+            Log::info("✅ (ProductController - recommended) Productos recomendados obtenidos: " . $products->count());
+
+            return response()->json($products);
+
+        } catch (\Throwable $e) {
+            Log::error("❌ (ProductController - recommended) Error: " . $e->getMessage());
+            return response()->json(['error' => 'Error interno al obtener productos recomendados.'], 500);
         }
     }
 }

@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   # ============================
-  # 🌐 NODE 0: API PRINCIPAL
+  # 🌐 GATEWAY
   # ============================
   main-api:
     build: ./marketplace-api
@@ -11,10 +11,18 @@ services:
       - "8000:8000"
     env_file:
       - ./marketplace-api/.env
+    volumes:
+      - main_api_app:/var/www/html
     depends_on:
       - mongo_main
+      - electronics-app
+      - clothes-app
+      - home-app
     networks:
-      - marketplace_net
+      - gateway_main
+      - gateway_electronics
+      - gateway_clothes
+      - gateway_home
 
   mongo_main:
     image: mongo:6
@@ -24,95 +32,107 @@ services:
     volumes:
       - mongo_main_data:/data/db
     networks:
-      - marketplace_net
+      - gateway_main
 
   # ============================
-  # ⚡ NODE 1: ELECTRONICS
+  # 🧠 REDIS
+  # ============================
+  redis:
+    image: redis:7
+    container_name: redis_main
+    networks:
+      - gateway_main
+      - gateway_electronics
+      - gateway_clothes
+      - gateway_home
+
+  # ============================
+  # ⚡ ELECTRONICS NODE
   # ============================
   electronics-app:
     build: ./marketplace-electronics
     container_name: electronics-app
-    ports:
-      - "8001:8000"
     env_file:
       - ./marketplace-electronics/.env
+    volumes:
+      - electronics_app:/var/www/html
     depends_on:
       - mongo_electronics
     networks:
-      - marketplace_net
+      - gateway_electronics
 
   mongo_electronics:
     image: mongo:6
     container_name: mongo_electronics
-    ports:
-      - "27017:27017"
     volumes:
       - mongo_electronics_data:/data/db
     networks:
-      - marketplace_net
+      - gateway_electronics
 
   # ============================
-  # 👕 NODE 2: CLOTHES
+  # 👕 CLOTHES NODE
   # ============================
   clothes-app:
     build: ./marketplace-clothes
     container_name: clothes-app
-    ports:
-      - "8002:8000"
     env_file:
       - ./marketplace-clothes/.env
+    volumes:
+      - clothes_app:/var/www/html
     depends_on:
       - mongo_clothes
     networks:
-      - marketplace_net
+      - gateway_clothes
 
   mongo_clothes:
     image: mongo:6
     container_name: mongo_clothes
-    ports:
-      - "27018:27017"
     volumes:
       - mongo_clothes_data:/data/db
     networks:
-      - marketplace_net
+      - gateway_clothes
 
   # ============================
-  # 🏠 NODE 3: HOME
+  # 🏠 HOME NODE
   # ============================
   home-app:
     build: ./marketplace-home
     container_name: home-app
-    ports:
-      - "8003:8000"
     env_file:
       - ./marketplace-home/.env
+    volumes:
+      - home_app:/var/www/html
     depends_on:
       - mongo_home
     networks:
-      - marketplace_net
+      - gateway_home
 
   mongo_home:
     image: mongo:6
     container_name: mongo_home
-    ports:
-      - "27019:27017"
     volumes:
       - mongo_home_data:/data/db
     networks:
-      - marketplace_net
+      - gateway_home
 
 # ============================
-# 📦 VOLUMES PERSISTENTES
+# 📦 VOLUMES
 # ============================
 volumes:
+  main_api_app:
+  electronics_app:
+  clothes_app:
+  home_app:
   mongo_main_data:
   mongo_electronics_data:
   mongo_clothes_data:
   mongo_home_data:
 
 # ============================
-# 🌍 RED COMPARTIDA
+# 🌍 REDES PRIVADAS
 # ============================
 networks:
-  marketplace_net:
-    driver: bridge
+  gateway_main:
+  gateway_electronics:
+  gateway_clothes:
+  gateway_home:

@@ -40,4 +40,15 @@ class LoadBalancerService
 
         return $this->nodes[$category];
     }
+
+    public function getAllNodes(): array
+    {
+        $allNodes = [];
+
+        foreach ($this->nodes as $category => $node) {
+            $allNodes[] = array_merge(['category' => $category], $node);
+        }
+
+        return $allNodes;
+    }
 }

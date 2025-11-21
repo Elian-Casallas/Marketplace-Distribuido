@@ -28,6 +28,8 @@ class SyncController extends Controller
                     $product->description = $productData['description'] ?? null;
                     $product->price = $productData['price'] ?? null;
                     $product->stock = $productData['stock'] ?? null;
+                    $product->link = $productData['link'] ?? null;
+                    $product->seller_id = $productData['seller_id'] ?? null;
                     $product->category = $productData['category'] ?? null;
                     $product->attributes = $productData['attributes'] ?? [];
                     try {

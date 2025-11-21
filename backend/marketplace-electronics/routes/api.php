@@ -13,4 +13,7 @@ Route::middleware('internal.auth')->group(function () {
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     // Nueva ruta para recibir datos del main
     Route::post('/replicate', [SyncController::class, 'receiveFromMain']);
+    //
+    Route::get('/products/recommended/{excludeId?}', [ProductController::class, 'recommended']);
+
 });

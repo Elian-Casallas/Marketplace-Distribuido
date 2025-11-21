@@ -15,12 +15,15 @@ class Product extends Model
         'price',
         'stock',
         'category',
+        'link',
+        'seller_id',
         'attributes', // campo flexible (array/json)
     ];
 
     protected $casts = [
         'price' => 'float',
         'stock' => 'integer',
+        'seller_id' => 'string',
     ];
 
     // helper to get attribute value safely

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Promise\Utils;
 use App\Http\Controllers\Controller;
 use App\Services\LoadBalancerService;
 use App\Models\PendingReplication;
@@ -35,13 +36,40 @@ class GatewayController extends Controller
             // Petición GET autenticada con API key
             $response = Http::withHeaders([
                 'X-Internal-Key' => $node['key'],
-            ])->get($node['url'] . '/api/products');
+            ])->get($node['url'] . "/api/products");
             return response()->json($response->json(), $response->status());
         } catch (\Throwable $e) {
             // ⚠️ Nodo caído o error de red
             Log::warning("⚠️ Nodo {$category} inaccesible, usando respaldo local: " . $e->getMessage());
             $backup = $this->getBackupProducts($category);
-            if ($backup['error']) {
+            if (array_key_exists('error', $backup)) {
+                return response()->json([
+                    'error' => $backup['message'],
+                    'details' => $backup['details'] ?? null
+                ], 503);
+            }
+            return response()->json($backup, 200);
+        }
+    }
+    public function handleProductsRecomends(Request $request, $id)
+    {
+        $category = $request->input('category');
+        Log::info("🔁 Obteniendo productos recomendados {$id} de la categoría {$category}");
+        if (!$category) {
+            return response()->json(['error' => 'Debe especificar la categoría'], 400);
+        }
+        try {
+            $node = $this->balancer->resolveNode($category);
+            // Petición GET autenticada con API key
+            $response = Http::withHeaders([
+                'X-Internal-Key' => $node['key'],
+            ])->get($node['url'] . "/api/products/recommended/{$id}");
+            return response()->json($response->json(), $response->status());
+        } catch (\Throwable $e) {
+            // ⚠️ Nodo caído o error de red
+            Log::warning("⚠️ Nodo {$category} inaccesible, usando respaldo local: " . $e->getMessage());
+            $backup = $this->getBackupProductsRecommend($category);
+            if (array_key_exists('error', $backup)) {
                 return response()->json([
                     'error' => $backup['message'],
                     'details' => $backup['details'] ?? null
@@ -51,21 +79,109 @@ class GatewayController extends Controller
         }
     }
     /**
+     * Obtiene productos desde el nodo correspondiente
+     * Ejemplo: GET /api/gateway/productos
+    */
+    public function handleAllProducts()
+    {
+        Log::info("🔁 Comenzando a obtener productos");
+
+        $nodes = $this->balancer->getAllNodes();
+        $promises = [];
+
+        // 🔹 Crear promesas asíncronas
+        foreach ($nodes as $node) {
+            $category = $node['category'];
+            $promises[$category] = Http::withHeaders([
+                'X-Internal-Key' => $node['key'],
+            ])->async()->get($node['url'] . "/api/products");
+        }
+
+        // 🔹 Esperar todas las promesas simultáneamente
+        $settled = Utils::settle($promises)->wait();
+
+        $results = [];
+
+        foreach ($settled as $category => $result) {
+            if (
+                $result['state'] === 'fulfilled'
+                && isset($result['value'])
+                && $result['value'] instanceof \Illuminate\Http\Client\Response
+            ){
+                Log::info("🔁 Se obtuvieron productos de {$category}");
+                $results[$category] = $result['value']->json();
+            } else {
+                Log::warning("⚠️ Nodo {$category} inaccesible, usando respaldo local: ");
+                $backup = $this->getBackupProducts($category);
+                $results[$category] = $backup['products'] ?? [];
+            }
+        }
+        Log::info("🔁 Se obtuvo todos los productos");
+        return response()->json([
+            'message' => '✅ Productos de todos los nodos',
+            'products' => $results
+        ]);
+    }
+
+    public function handleAllProductsUsuarios(Request $request, $user_id)
+    {
+        Log::info("🔁 Comenzando a obtener productos");
+
+        $nodes = $this->balancer->getAllNodes();
+        $promises = [];
+
+        // 🔹 Crear promesas asíncronas
+        foreach ($nodes as $node) {
+            $category = $node['category'];
+            $promises[$category] = Http::withHeaders([
+                'X-Internal-Key' => $node['key'],
+            ])->async()->get($node['url'] . "/api/products?filter=seller_id:${user_id}");
+        }
+
+        // 🔹 Esperar todas las promesas simultáneamente
+        $settled = Utils::settle($promises)->wait();
+
+        $results = [];
+
+        foreach ($settled as $category => $result) {
+            if (
+                $result['state'] === 'fulfilled'
+                && isset($result['value'])
+                && $result['value'] instanceof \Illuminate\Http\Client\Response
+            ){
+                Log::info("🔁 Se obtuvieron productos de {$category}");
+                $results[$category] = $result['value']->json();
+            } else {
+                Log::warning("⚠️ Nodo {$category} inaccesible, usando respaldo local:$user_id ");
+                $backup = $this->getBackupProductsFiltros($category, $user_id);
+                $results[$category] = $backup['products'] ?? [];
+            }
+        }
+        Log::info("🔁 Se obtuvo todos los productos");
+        return response()->json([
+            'message' => '✅ Productos de todos los nodos',
+            'products' => $results
+        ]);
+    }
+    /**
      * Obtiene producto desde el nodo correspondiente
      * Ejemplo: GET /api/gateway/products/id
     */
     public function show(Request $request, $id)
     {
         $category = $request->input('category');
+        Log::info("🔁 Obteniendo producto {$id} de la categoría {$category}");
         if (!$category) {
             return response()->json(['error' => 'Debe especificar la categoría'], 400);
         }
         try {
+            log::info("🔁 Resolviendo nodo para la categoría {$category}");
             $node = $this->balancer->resolveNode($category);
             // Petición GET autenticada con API key
             $response = Http::withHeaders([
                 'X-Internal-Key' => $node['key'],
-            ])->get($node['url'] . '/api/products/{$id}');
+            ])->get($node['url'] . "/api/products/{$id}");
+            log::info("🔁 Producto {$id} obtenido del nodo {$category}");
             return response()->json($response->json(), $response->status());
         } catch (\Throwable $e) {
             // ⚠️ Nodo caído o error de red
@@ -77,8 +193,123 @@ class GatewayController extends Controller
                     'details' => $backup['details'] ?? null
                 ], 503);
             }
-            return response()->json($backup, 200);
+            return response()->json($backup['product'], 200);
         }
+    }
+
+    public function bulk(Request $request)
+    {
+        $items = $request->input('products');
+
+        if (!is_array($items) || empty($items)) {
+            return response()->json(['error' => 'Debe enviar productos'], 400);
+        }
+
+        Log::info("🔁 (Gateway - bulk) Solicitando productos en lote");
+
+        $promises = [];
+        $mapInfo = []; // Relacionar cada promesa con (id, category, cantidad)
+
+        // 🔹 Crear promesas asíncronas
+        foreach ($items as $index => $item) {
+
+            if (!isset($item['id']) || !isset($item['category'])) {
+                Log::warning("⚠️ Producto inválido recibido en bulk", $item);
+                continue;
+            }
+
+            $id = $item['id'];
+            $category = $item['category'];
+            $cantidad = $item['cantidad'] ?? 1;
+            try {
+                $node = $this->balancer->resolveNode($category);
+
+                $promises[$index] = Http::withHeaders([
+                    'X-Internal-Key' => $node['key'],
+                ])->async()->get($node['url'] . "/api/products/{$id}");
+
+                $mapInfo[$index] = [
+                    'id' => $id,
+                    'category' => $category,
+                    'cantidad' => $cantidad,
+                    'node' => $node
+                ];
+            } catch (\Throwable $e) {
+                Log::warning("⚠️ No se pudo resolver nodo para {$category}: " . $e->getMessage());
+            }
+        }
+
+        // 🔹 Esperar todas las promesas simultáneamente
+        $settled = Utils::settle($promises)->wait();
+
+        $results = [];
+        $errors = [];
+
+        foreach ($settled as $index => $result) {
+            $info = $mapInfo[$index];
+
+            $id = $info['id'];
+            $category = $info['category'];
+            $cantidad = $info['cantidad'];
+            $node = $info['node'];
+
+             // 🔥 1. CASO: el "value" ES UNA EXCEPCIÓN -> nodo caído
+            if ($result['state'] === 'fulfilled' && $result['value'] instanceof \Exception) {
+                Log::warning("⚠️ Nodo $category caído (exception en value), usando backup");
+
+                $backup = $this->getBackupProduct($category, $id);
+
+                if ($backup['error']) {
+                    $errors[] = [
+                        'id' => $id,
+                        'category' => $category,
+                        'error' => $backup['message']
+                    ];
+                } else {
+                    $backup['cantidad'] = $cantidad;
+                    $results[] = $backup;
+                }
+
+                continue;
+            }
+            if ($result['state'] === 'fulfilled') {
+                $response = $result['value'];
+
+                if ($response->successful()) {
+                    $product = $response->json();
+                    $product['cantidad'] = $cantidad;
+
+                    Log::info("🔁 Producto {$id} obtenido correctamente desde {$category}");
+
+                    $results[] = $product;
+                    continue;
+                }
+            }
+
+            // 🔥 Nodo caído o error → fallback
+            Log::warning("⚠️ Nodo {$category} inaccesible para producto {$id}, usando backup");
+
+            $backup = $this->getBackupProduct($category, $id);
+
+            if ($backup['error']) {
+                $errors[] = [
+                    'id' => $id,
+                    'category' => $category,
+                    'error' => $backup['message']
+                ];
+                continue;
+            }
+
+            $backup['cantidad'] = $cantidad;
+            $results[] = $backup;
+        }
+
+        Log::info("🔁 Bulk finalizado. Productos obtenidos: " . count($results));
+
+        return response()->json([
+            'products' => $results,
+            'errors' => $errors
+        ]);
     }
     /**
      * Crea un producto en el nodo correspondiente
@@ -204,6 +435,133 @@ class GatewayController extends Controller
             ], 500);
         }
     }
+
+    public function bulkUpdate(Request $request)
+    {
+        $items = $request->input('products');
+        Log::info("🟦 (Gateway - bulkUpdate) Iniciando actualización masiva", [
+            'products' => $items
+        ]);
+        if (!is_array($items) || empty($items)) {
+            return response()->json(['error' => 'Debe enviar productos'], 400);
+        }
+
+        Log::info("🟦 (Gateway - bulkUpdate) Iniciando actualización masiva");
+
+        $promises = [];
+        $mapInfo = [];
+
+        foreach ($items as $index => $item) {
+            if (!isset($item['id']) || !isset($item['category'])) {
+                Log::warning("⚠️ Producto inválido", $item);
+                continue;
+            }
+
+            $id       = $item['id'];
+            $category = $item['category'];
+            $payload  = $item;
+
+            try {
+                $node = $this->balancer->resolveNode($category);
+
+                // PUT asíncrono
+                $promises[$index] = Http::withHeaders([
+                    'X-Internal-Key' => $node['key'],
+                ])->async()->put("{$node['url']}/api/products/{$id}", $payload);
+
+                $mapInfo[$index] = [
+                    'id'       => $id,
+                    'category' => $category,
+                    'payload'  => $payload,
+                    'node'     => $node,
+                ];
+            } catch (\Throwable $e) {
+                Log::warning("⚠️ No se pudo resolver nodo para $category: " . $e->getMessage());
+            }
+        }
+
+        // Esperar todas las promesas
+        $settled = Utils::settle($promises)->wait();
+
+        $updated = [];
+        $errors  = [];
+
+        foreach ($settled as $index => $result) {
+            $info = $mapInfo[$index];
+            $id       = $info['id'];
+            $category = $info['category'];
+            $payload  = $info['payload'];
+            $node     = $info['node'];
+
+            // ✔ FUE EXITOSA LA PETICIÓN REMOTA
+            if ($result['state'] === 'fulfilled' && $result['value']->successful()) {
+
+                Log::info("🟩 Producto {$id} actualizado correctamente en nodo {$node['name']}");
+
+                $updated[] = [
+                    'id'      => $id,
+                    'node'    => $node['name'],
+                    'status'  => 'updated',
+                    'local'   => false,
+                ];
+
+                continue;
+            }
+
+            // ❌ EL NODO FALLÓ → fallback local
+            Log::warning("🟥 Nodo {$node['name']} caído para producto {$id}. Guardando respaldo local.");
+
+            $payload['id'] = $id; // siempre agregar id
+
+            $backupOK = $this->updateBackup($category, $id, $payload);
+
+            if ($backupOK) {
+
+                PendingReplication::create([
+                    'node' => $node['name'],
+                    'payload' => [
+                        'operation' => 'update',
+                        'product' => $payload,
+                    ],
+                    'status' => 'pending',
+                    'attempts' => 0,
+                    'last_error' => $result['value'] instanceof \Exception
+                        ? $result['value']->getMessage()
+                        : 'Nodo no accesible',
+                ]);
+
+                SyncLog::create([
+                    'direction' => 'main->node',
+                    'target' => $node['name'],
+                    'status' => 'pending',
+                    'message' => "Nodo caído. Actualización diferida para producto {$id}.",
+                    'timestamp' => now(),
+                ]);
+
+                $updated[] = [
+                    'id'      => $id,
+                    'node'    => $node['name'],
+                    'status'  => 'backup',
+                    'local'   => true,
+                ];
+
+                continue;
+            }
+
+            // ❌❌ No nodo ni backup
+            $errors[] = [
+                'id' => $id,
+                'category' => $category,
+                'error' => 'Fallo crítico. No se pudo actualizar ni en nodo ni en respaldo.',
+            ];
+        }
+
+        return response()->json([
+            'updated' => $updated,
+            'errors'  => $errors
+        ], 207); // 207 Multi-Status
+    }
+
     /**
      * Eliminar un producto en el nodo correspondiente
      * Ejemplo: PUT /api/gateway/products  { "category": "electronics", ... }
@@ -211,7 +569,7 @@ class GatewayController extends Controller
     public function deleteProduct(Request $request, $id)
     {
         $category = $request->input('category');
-
+        Log::info("🗑️ (Gateway - deleteProduct) Intentando eliminar producto ID: $id de la categoría: $category");
         if (!$category) {
             return response()->json(['error' => 'Debe especificar la categoría del producto'], 400);
         }
@@ -304,19 +662,59 @@ class GatewayController extends Controller
         try {
             $mongo = DB::connection('mongodb');
             $products = $mongo->table("replicated_products_{$category}")->get();
-            if ($products->isEmpty())
-            {
-                return [
-                    'error' => true,
-                    'message' => "Nodo inaccesible y no hay respaldo local disponible",
-                    'products' => []
-                ];
+            if ($products->isEmpty()){
+                return [];
             }
             return [
-                'error' => false,
-                'from_backup' => true,
-                'message' => "✅ Datos obtenidos desde respaldo local replicated_products_{$category}",
-                'products' => $products
+                "products" => $products
+            ];
+        }
+        catch (\Throwable $backupError)
+        {
+            Log::error("❌ Error obteniendo respaldo local: " . $e->getMessage());
+            return [
+                'error' => true,
+                'message' => 'Error crítico obteniendo productos desde respaldo local',
+                'details' => $e->getMessage()
+            ];
+        }
+    }
+
+    private function getBackupProductsFiltros(string $category, string $user_id)
+    {
+        try {
+            Log::error("❌ Error obteniendo respaldo local: " . $user_id);
+            $mongo = DB::connection('mongodb');
+            $products = $mongo->table("replicated_products_{$category}")->where('seller_id', $user_id)->get();
+            if ($products->isEmpty()){
+                return [];
+            }
+            return [
+                "products" => $products
+            ];
+        }
+        catch (\Throwable $backupError)
+        {
+            Log::error("❌ Error obteniendo respaldo local: " . $e->getMessage());
+            return [
+                'error' => true,
+                'message' => 'Error crítico obteniendo productos desde respaldo local',
+                'details' => $e->getMessage()
+            ];
+        }
+    }
+
+    private function getBackupProductsRecommend(string $category)
+    {
+        try {
+            $mongo = DB::connection('mongodb');
+            $products = $mongo->table("replicated_products_{$category}")->limit(20)->get();
+            if ($products->isEmpty())
+            {
+                return [];
+            }
+            return [
+                "products" => $products
             ];
         }
         catch (\Throwable $backupError)
