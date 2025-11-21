@@ -1,0 +1,160 @@
+.sectionC{
+  padding-block: var(--section-padding);
+  margin-block: 3rem;
+}
+
+.h2 {
+  font-size: var(--fs-2);
+}
+.h2, .h3 {
+  color: var(--eerie-black);
+}
+
+li{
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+}
+
+.h3 {
+  font-size: var(--fs-3);
+}
+
+.btn {
+  background-color: var(--primary-color);
+  color: var(--contrast-ligth-color);
+  border: none;
+  width: 75%;
+}
+
+.containerC{
+  padding-inline: 15px;
+}
+
+.h4 {
+  font-size: var(--fs-4);
+}
+li{
+  list-style: none;
+}
+
+.h3 {
+  font-size: var(--fs-3);
+}
+
+
+table{
+  text-align: center;
+}
+
+.blogstable table button {
+  font-size: 15px;
+  display: inline-flex;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  border: 1px solid #555;
+  color: #444;
+  transition: 0.3s ease;
+}
+
+.blogstable table button:hover:nth-child(1) {
+  background-color: rgb(255, 85, 85);
+  border-color: rgb(255, 85, 85);
+  color: #fff;
+}
+
+.blogstable table button:hover:nth-child(2) {
+  background-color: green;
+  border-color: green;
+  color: #fff;
+}
+
+.blogstable table button:hover:nth-child(3) {
+  background-color: rgb(14, 130, 198);
+  border-color: rgb(63, 206, 63);
+  color: #fff;
+}
+
+.blogpagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  margin-top: 3rem;
+  color: #000;
+}
+
+.blogpagination button {
+  background-color: #f0f0f0;
+  border: none;
+  color: #333;
+  padding: 15px 20px;
+  font-weight: 600;
+  margin-right: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.blogpagination button:hover {
+  background-color: #667eea;
+  color: #fff;
+}
+
+.blogpagination button.active {
+  background-color: #667eea;
+  color: #fff;
+}
+
+.blogpagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagar{
+  background-color: #667eea !important;
+  color: #fff !important;
+  border-color: #667eea !important;
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.loader {
+  border: 6px solid #e3e3e3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+.loader-text {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  color: #444;
+  text-align: center;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media(max-width: 800px){
+  .containerC{
+    overflow-x: hidden;
+  }
+  .blogstable{
+    overflow-x: auto;
+  }
+}

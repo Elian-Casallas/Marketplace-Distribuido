@@ -1,0 +1,189 @@
+<section class="sectionU service">
+  <div class="containerU">
+    <i class="bi bi-person-circle imagen"></i>
+    <hr>
+    <h2 class="h2 section-title">
+      <span class="span">Información del usuario</span>
+    </h2>
+    <ul class="grid-list">
+      <li>
+        <div class="service-card mb-3">
+          <label for="name" class="form-label h3 card-title">Nombre completo</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            #name
+            placeholder="Ej. Juan Pérez"
+            required
+            [(ngModel)]="nombre"
+            [disabled]="disabledt"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="email" class="form-label h3 card-title">Correo electrónico</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            #email
+            placeholder="correo@ejemplo.com"
+            required
+            [disabled]="disabledt"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="username" class="form-label h3 card-title">Usuario (Número de identificación)</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            #username
+            placeholder="Número de identificación"
+            required
+            disabled
+            [(ngModel)]="iden"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="password" class="form-label h3 card-title">Contraseña</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            #password
+            placeholder="********"
+            required
+            min="6"
+            [(ngModel)]="pass"
+            [disabled]="disabledt"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="username" class="form-label h3 card-title">Teléfono</label>
+          <input
+            type="text"
+            class="form-control"
+            id="tel"
+            #tel
+            placeholder="Ej: 3001234567"
+            required
+            [(ngModel)]="telefono"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="estado" class="form-label h3 card-title">Selecciona su estado</label>
+          <select id="estado" name="estado" class="form-select" required [disabled]="disabledt" [(ngModel)]="isSeller" (change)="OnSelectEstado()">
+            <option *ngFor="let e of vendedorArray" [value]="e.value">{{ e.text }}</option>
+          </select>
+        </div>
+      </li>
+    </ul>
+    <div class="containerBtn">
+      <button class="btn" [disabled]="disabledt" (click)="actualizar()">Actualizar información</button>
+    </div>
+    <hr>
+    <h2 class="h2 section-title">
+      <span class="span">Información del domicilio</span>
+    </h2>
+    <ul class="grid-list">
+      <li>
+        <div class="service-card mb-3">
+          <label for="name" class="form-label h3 card-title">Dirección o lugar de entrega</label>
+          <input
+            type="text"
+            class="form-control"
+            id="dir"
+            #dir
+            placeholder="Ej: Carrera 71d #1-14 Sur"
+            required
+            [(ngModel)]="direccion"
+            [disabled]="disabledt"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="email" class="form-label h3 card-title">Departamento</label>
+          <input
+            type="text"
+            class="form-control"
+            id="depart"
+            #depart
+            placeholder="Ej: Meta"
+            required
+            [(ngModel)]="departamento"
+            [disabled]="disabledt"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="username" class="form-label h3 card-title">Municipio / Localidad</label>
+          <input
+            type="text"
+            class="form-control"
+            id="localidad"
+            #localidad
+            placeholder="Ej: Villavicencio"
+            required
+            [(ngModel)]="municipio"
+            [disabled]="disabledt"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="password" class="form-label h3 card-title">Barrio</label>
+          <input
+            type="text"
+            class="form-control"
+            id="Barrio"
+            #Barrio
+            placeholder="Ej: Comuna 5"
+            required
+            [(ngModel)]="barrio"
+            [disabled]="disabledt"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="password" class="form-label h3 card-title">Apartamento / Casa (opcional)</label>
+          <input
+            type="text"
+            class="form-control"
+            id="casa"
+            #casa
+            placeholder="Ej: Casa"
+            required
+            [(ngModel)]="lugar"
+            [disabled]="disabledt"
+          />
+        </div>
+      </li>
+      <li>
+        <div class="service-card mb-3">
+          <label for="domicilio" class="form-label h3 card-title">Tipo de domicilio</label>
+          <select id="domicilio" name="domicilio" class="form-select" required [disabled]="disabledt" [(ngModel)]="domicilio">
+            <option *ngFor="let e of domicilioArray" [value]="e">{{ e }}</option>
+          </select>
+        </div>
+      </li>
+    </ul>
+    <div class="containerBtn">
+      <button class="btn" [disabled]="disabledt" (click)="actualizarDomicilio()">Actualizar información</button>
+    </div>
+    <hr>
+  </div>
+</section>

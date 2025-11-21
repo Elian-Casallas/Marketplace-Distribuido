@@ -1,0 +1,36 @@
+<section class="sectionP service">
+  <div class="containerP">
+    <!-- LOADER -->
+    <div class="loader-container" *ngIf="cargando">
+      <div class="loader"></div>
+      <p class="loader-text">Cargando producto... por favor espere</p>
+    </div>
+    <ul class="grid-list" *ngIf="!cargando">
+      <li class="product-card">
+        <ul class="grid-list2">
+           <li *ngFor="let e of productosArray" id="e.id">
+              <a [attr.href]="'/producto/' + e.category + '/' + e.id" class="product-card">
+                <div class="card-banner img-holder" style="--width: 360; --height: 360;">
+                  <img [src]="e.link" loading="lazy" alt="Commodo leo sed porta" class="img-cover default">
+                </div>
+                <div class="card-content">
+                  <div class="wrapper">
+                    <div class="rating-wrapper">
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                    </div>
+                    <span class="span">(1)</span>
+                  </div>
+                  <h3 class="h3"><a [attr.href]="'/producto/' + e.category + '/' + e.id" class="card-title">{{e.name}}</a></h3>
+                  <data class="card-price" value="15">${{e.price}}</data>
+                </div>
+              </a>
+            </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>

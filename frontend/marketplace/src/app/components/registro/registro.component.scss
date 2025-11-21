@@ -1,0 +1,39 @@
+.register-container {
+  padding-inline: 1rem;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  background-color: #fdfdfd;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 460px;
+  background-color: var(--contrast-ligth-color);
+  border-radius: 16px;
+}
+
+.register-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.btn-register {
+  background-color: var(--primary-color);
+  color: var(--contrast-ligth-color);
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-register:hover {
+  background-color: #218838;
+}
+
+.login-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}

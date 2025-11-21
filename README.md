@@ -12,7 +12,7 @@
    docker-compose.yml
 
 /Frontend/
-   web/
+   marketplace/
 
 README.md
 ```
@@ -25,11 +25,11 @@ README.md
 
 Marketplace distribuido con nodos por categoría (electronics, clothes, home) y un gateway (main-api) que centraliza rutas y mantiene réplicas en MongoDB. Se implementaron replicación y sincronización con colas/jobs. Pruebas de tolerancia a fallos completada.
 
-# Cómo clonar y preparar (rápido)
+# Cómo clonar y preparar backend (rápido)
 ```
 # clonar
 git clone <url-del-repo>
-cd Backend
+cd backend
 # revisar archivos .env.example en cada carpeta y personalizar si hace falta
 # levantar servicios
 docker compose up -d --build
@@ -49,3 +49,14 @@ docker compose up -d --build
 * Ejecutar scheduler (si pruebas local): `php artisan schedule:work` dentro del contenedor
 
 * Ejecutar worker: `php artisan queue:work redis --queue=default --tries=3 --timeout=90`
+
+
+# Cómo clonar y preparar frontend (rápido)
+```
+# clonar
+git clone <url-del-repo>
+cd frontend
+cd marketplace
+# revisar archivos .env.example en cada carpeta y personalizar si hace falta
+# levantar el proyecto con el comando de angular
+ng serve

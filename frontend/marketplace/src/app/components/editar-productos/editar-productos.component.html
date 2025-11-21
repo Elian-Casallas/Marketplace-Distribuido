@@ -1,0 +1,79 @@
+<div class="agregar-container d-flex justify-content-center align-items-start">
+  <div class="agregar-card card shadow-lg p-4">
+    <h1>Editar producto</h1>
+    <form (submit)="onEdit($event, name.value, link.value, precioInput.value, cantidad.value, descripcion.value)">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre del producto</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          placeholder="Ingresa el nombre del producto"
+          required
+          #name
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="link" class="form-label">Link de la imagen del producto</label>
+        <input
+          type="text"
+          class="form-control"
+          id="link"
+          name="link"
+          placeholder="Ingresa el link del producto"
+          required
+          #link
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="precio" class="form-label">Precio del producto</label>
+        <input
+          type="text"
+          class="form-control"
+          id="precio"
+          name="precio"
+          placeholder="Ingresa el precio del producto"
+          required
+          #precioInput
+          pattern="^\d{1,10}$"
+          maxlength="10"
+          minlength="1"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="cantidad" class="form-label">Cantidad en stock del producto</label>
+        <input
+          type="text"
+          class="form-control"
+          id="cantidad"
+          name="cantidad"
+          placeholder="Ingresa la cantidad en stock del producto"
+          required
+          #cantidad
+          pattern="^\d{1,10}$"
+          maxlength="10"
+          minlength="1"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="tipo" class="form-label">Tipo del producto</label>
+        <select id="tipo" class="form-select" name="tipo" required>
+          <option value="clothes">Ropa</option>
+          <option value="electronics">Electrónica</option>
+          <option value="home">Casa</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción del producto</label>
+        <textarea id="descripcion" #descripcion class="form-control" rows="5" placeholder="Descripción del producto..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-login w-100">Guardar producto</button>
+    </form>
+  </div>
+</div>

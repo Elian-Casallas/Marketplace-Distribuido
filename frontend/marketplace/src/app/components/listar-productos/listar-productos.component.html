@@ -1,0 +1,64 @@
+<div class="lista-container d-flex justify-content-center align-items-start">
+  <!-- LOADER -->
+  <div class="loader-container" *ngIf="cargando">
+    <div class="loader"></div>
+    <p class="loader-text">Cargando información... por favor espere</p>
+  </div>
+  <div class="lista-card card shadow-lg p-4" *ngIf="!cargando">
+    <div class="blogstable" *ngIf="productosFiltrados.length > 0; else noData">
+      <h1>Lista de productos</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of productosFiltrados; let i = index">
+            <td>{{ (pagina - 1) * cantidad + (i + 1) }}</td>
+            <td>{{ producto.name }}</td>
+            <td>{{ producto.category }}</td>
+            <td>{{ producto.price }}</td>
+            <td>{{ producto.stock }}</td>
+            <td>
+              <div class="divButton">
+                <button (click)="verProducto(producto.id, producto.category)" title="editar">
+                  Editar
+                </button>
+                <button (click)="eliminarProducto(producto.id, producto.category)" title="eliminar">
+                  Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="blogpagination">
+        <button (click)="paginacion(pagina - 1)" [disabled]="pagina === 1">
+          Anterior
+        </button>
+
+        <button *ngFor="let number of pageNumbers"
+                (click)="paginacion(number)"
+                [class.active]="pagina === number">
+          {{ number }}
+        </button>
+
+        <button (click)="paginacion(pagina + 1)"
+                [disabled]="productosFiltrados.length < cantidad || pagina === totalPages">
+          Siguiente
+        </button>
+      </div>
+    </div>
+
+    <ng-template #noData>
+      <p>No hay productos para mostrar.</p>
+    </ng-template>
+  </div>
+</div>

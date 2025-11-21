@@ -1,0 +1,101 @@
+<header class="header" data-header [ngClass]="{ 'opneMenu': !home }">
+  <div class="containerDv">
+    <button class="nav-toggle-btn" aria-label="toggle menu" (click)="toggleNavbar()" data-nav-toggler>
+      <svg [ngClass]="{'desactivar': isNavbarActive}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/></svg>
+      <svg [ngClass]="{'desactivar': !isNavbarActive}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z"/></svg>
+    </button>
+    <a href="#" class="logo">MarketZone</a>
+
+    <div class="service-card mt-2 w-100 inputBuscar">
+      <input
+        type="text"
+        class="form-control"
+        id="producto"
+        #producto
+        placeholder="Buscar producto..."
+        required
+        (keyup.enter)="buscar($event)"
+      />
+    </div>
+
+    <nav class="navbar1" data-navbar>
+      <ul class="navbar-list">
+        <li>
+          <div class="service-card mt-2 w-100 inputBuscarCelular">
+            <input
+              type="text"
+              class="form-control"
+              id="producto"
+              #producto
+              placeholder="Buscar producto..."
+              required
+              (keyup.enter)="buscar($event)"
+            />
+          </div>
+        </li>
+        <li><a href="#" class="navbar-link">Home</a></li>
+        <li class="has-submenu">
+          <a href="/productos" class="navbar-link ocultar">Categorías</a>
+          <p class="navbar-link ocultarC">Categorías</p>
+          <ul class="main-menu">
+            <li>
+              <a href="/productos/clothes">Ropa</a>
+            </li>
+            <li>
+              <a href="/productos/electronics">Electrónica</a>
+            </li>
+            <li>
+              <a href="/productos/house">Casa</a>
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu" [ngClass]="{'desactivar': !activo}">
+          <a class="navbar-link">Ventas</a>
+          <ul class="main-menu">
+            <li>
+              <a href="/Ventas/Productos/Agregar">Agregar Producto</a>
+            </li>
+            <li>
+              <a href="/Ventas/Productos/Listar">Listar</a>
+            </li>
+            <!-- <li>
+              <a href="/Ventas/Datos">Datos de venta</a>
+            </li> -->
+          </ul>
+        </li>
+        <li>
+          <a [attr.href]="'/usuario/' + idUser" class="action-btn user user_cel" [ngClass]="{'desactivar': !isNavbarActive}" aria-label="User">
+            <i class="bi bi-person-circle"></i>
+          </a>
+        </li>
+        <li>
+          <a href="/carrito" [ngClass]="{'desactivar': !activo}">
+            <button class="action-btn cart shop" aria-label="cart">
+              <i class="bi bi-bag-fill"></i>
+              <span class="btn-badge">{{productos.length}}</span>
+            </button>
+          </a>
+        </li>
+      </ul>
+      <button [ngClass]="{'desactivar': !activo}" class="navbar-action-btn" (click)="cerrarSesion()">Cerrar sesion</button>
+      <a href="/login" [ngClass]="{'desactivar': activo}" class="navbar-action-btn">Iniciar sesion</a>
+    </nav>
+    <div class="header-actions">
+      <a href="/login" class="action-btn user" [ngClass]="{'desactivar': activo}" aria-label="User">
+        <i class="bi bi-person"></i>
+      </a>
+      <a [attr.href]="'/usuario/' + idUser" class="action-btn user" [ngClass]="{'desactivar': !activo}" aria-label="User">
+        <i class="bi bi-person-circle"></i>
+      </a>
+      <button class="action-btn cart pc" aria-label="cart" [ngClass]="{'desactivar': !activo}" title="Cerrar sesión" (click)="cerrarSesion()">
+        <i class="bi bi-door-closed-fill"></i>
+      </button>
+      <a href="/carrito" [ngClass]="{'desactivar': !activo}">
+        <button class="action-btn cart celular" aria-label="cart">
+          <i class="bi bi-bag-fill"></i>
+          <span class="btn-badge">{{productos.length}}</span>
+        </button>
+      </a>
+    </div>
+  </div>
+</header>

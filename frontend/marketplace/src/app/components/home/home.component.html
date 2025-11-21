@@ -1,0 +1,110 @@
+<section class="sectionC category" aria-label="category">
+  <div class="containerC">
+    <h3 class="h3 section-title">
+      Productos recomendados de Ropa
+    </h3>
+    <!-- LOADER -->
+    <div class="loader-container" *ngIf="cargandoRecomendados">
+      <div class="loader"></div>
+      <p class="loader-text">Cargando productos de ropa recomendados...</p>
+    </div>
+    <ul class="has-scrollbar">
+      <li class="scrollbar-item" *ngFor="let e of productoArray" id="e.id">
+        <a [attr.href]="'/producto/' + e.category + '/' + e.id" class="category-card">
+          <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
+            <img [src]="e.link" width="330" height="300" loading="lazy" alt="Cat Food"
+              class="img-cover">
+          </figure>
+          <div class="card-content">
+            <div class="wrapper">
+              <div class="rating-wrapper">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+              </div>
+              <span class="span">(1)</span>
+            </div>
+            <h3 class="h3"><a [attr.href]="'/producto/' + e.category + '/' + e.id" class="card-title">{{e.name}}</a></h3>
+            <data class="card-price" value="15">${{e.price}}</data>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="sectionC category" aria-label="category">
+  <div class="containerC">
+    <h3 class="h3 section-title">
+      Productos recomendados de Electrónica
+    </h3>
+    <!-- LOADER -->
+    <div class="loader-container" *ngIf="cargandoRecomendados2">
+      <div class="loader"></div>
+      <p class="loader-text">Cargando productos de electrónica recomendados...</p>
+    </div>
+    <ul class="has-scrollbar">
+      <li class="scrollbar-item" *ngFor="let e of productoArray2" id="e.id">
+        <a [attr.href]="'/producto/' + e.category + '/' + e.id" class="category-card">
+          <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
+            <img [src]="e.link" width="330" height="300" loading="lazy" alt="Cat Food"
+              class="img-cover">
+          </figure>
+          <div class="card-content">
+            <div class="wrapper">
+              <div class="rating-wrapper">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+              </div>
+              <span class="span">(1)</span>
+            </div>
+            <h3 class="h3"><a [attr.href]="'/producto/' + e.category + '/' + e.id" class="card-title">{{e.name}}</a></h3>
+            <data class="card-price" value="15">${{e.price}}</data>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="sectionC category" aria-label="category">
+  <div class="containerC">
+    <h3 class="h3 section-title">
+      Productos recomendados de Casa
+    </h3>
+    <!-- LOADER -->
+    <div class="loader-container" *ngIf="cargandoRecomendados3">
+      <div class="loader"></div>
+      <p class="loader-text">Cargando productos de Casa recomendados...</p>
+    </div>
+    <ul class="has-scrollbar">
+      <li class="scrollbar-item" *ngFor="let e of productoArray3" id="e.id">
+        <a [attr.href]="'/producto/' + e.category + '/' + e.id" class="category-card">
+          <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
+            <img [src]="e.link" width="330" height="300" loading="lazy" alt="Cat Food"
+              class="img-cover">
+          </figure>
+          <div class="card-content">
+            <div class="wrapper">
+              <div class="rating-wrapper">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+              </div>
+              <span class="span">(1)</span>
+            </div>
+            <h3 class="h3"><a [attr.href]="'/producto/' + e.category + '/' + e.id" class="card-title">{{e.name}}</a></h3>
+            <data class="card-price" value="15">${{e.price}}</data>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

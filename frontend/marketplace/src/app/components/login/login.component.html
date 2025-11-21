@@ -1,0 +1,43 @@
+<div class="login-container d-flex justify-content-center align-items-center">
+  <div class="login-card card shadow-lg p-4">
+    <div class="text-center mb-4">
+      <hr>
+      <h2 class="login-title">Bienvenido a MarketZone 🐾</h2>
+      <p class="text-muted">Inicia sesión para acceder a tu cuenta</p>
+    </div>
+
+    <form (submit)="onLogin($event, username.value, password.value)">
+      <div class="mb-3">
+        <label for="username" class="form-label">Usuario</label>
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          name="username"
+          #username
+          placeholder="Ingresa tu usuario"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          #password
+          placeholder="Ingresa tu contraseña"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-login w-100">Iniciar Sesión</button>
+
+      <div class="text-center mt-3">
+        <span>¿No tienes una cuenta? </span><a href="/registro" class="register-link">Regístrate aquí</a>
+      </div>
+    </form>
+  </div>
+</div>

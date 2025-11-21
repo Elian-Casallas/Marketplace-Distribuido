@@ -1,0 +1,67 @@
+<div class="register-container d-flex justify-content-center align-items-center">
+  <div class="register-card card shadow-lg p-4">
+    <div class="text-center mb-4">
+      <hr>
+      <h2 class="register-title">Crea tu cuenta 🐶</h2>
+      <p class="text-muted">Regístrate para acceder a todos los servicios</p>
+    </div>
+
+    <form (submit)="onRegister($event, name.value, email.value, username.value, password.value)">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre completo</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          #name
+          placeholder="Ej. Juan Pérez"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          #email
+          placeholder="correo@ejemplo.com"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="username" class="form-label">Usuario (Número de identificación)</label>
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          #username
+          placeholder="Número de identificación"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          #password
+          placeholder="********"
+          minlength="6"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-register w-100">Registrarme</button>
+
+      <div class="text-center mt-3">
+        <span>¿Ya tienes una cuenta? </span>
+        <a href="/login" class="login-link">Inicia sesión</a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,275 @@
+.header {
+  width: 100%;
+  background-color: var(--white);
+  padding-block: 20px;
+  z-index: 4;
+  box-shadow: var(--shadow-1);
+}
+
+.header.active {
+  top: 0;
+  left: 0;
+  position: fixed;
+  box-shadow: var(--shadow-1);
+}
+
+.header .containerDv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.containerDv{
+  padding-inline: 15px;
+}
+
+.nav-toggle-btn {
+  width: 45px;
+  transition: var(--transition-1);
+}
+
+.logo {
+  font-family: 'Carter One', cursive;
+  font-size: 2rem;
+  text-decoration: none;
+  color: var(--black);
+}
+
+.has-submenu{
+  position: relative;
+}
+
+.main-menu{
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  transition: all .3s ease-in;
+  interpolate-size: allow-keywords;
+}
+
+.has-submenu:hover .main-menu {
+  z-index: 1;
+  width: 11rem;
+  height: auto;
+  background-color: var(--white);
+  box-shadow: var(--shadow-2);
+  padding: 1rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 5px;
+}
+
+.main-menu li a:hover{
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar1 {
+  position: fixed;
+  top: 85px;
+  left: -320px;
+  bottom: 0;
+  background-color: var(--white);
+  max-width: 320px;
+  width: 100%;
+  padding: 20px 10px;
+  box-shadow: var(--shadow-2);
+  transition: 0.25s var(--cubic-out);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.navbar1.active {
+  transform: translateX(320px);
+  transition-timing-function: var(--cubic-in);
+  z-index: 1;
+}
+
+.navbar-action-btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  background-color: var(--sonic-silver);
+  color: var(--white);
+  font-weight: var(--fw-700);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+li {
+  list-style: none;
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.header .action-btn{
+  position: relative;
+  font-size: 22px;
+  transition: var(--transition-1);
+}
+
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.action-btn.user {
+  display: none;
+}
+
+.header .btn-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: var(--portland-orange);
+  color: var(--white);
+  font-size: var(--fs-8);
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
+  border-radius: 50px;
+}
+
+.navbar-link{
+  color: var(--eerie-black);
+  font-size: var(--fs-6);
+  padding: 10px 15px;
+}
+
+.navbar-list{
+  margin-bottom: 0;
+}
+
+.desactivar {
+  display: none !important;
+}
+
+.navbar-link {
+  color: var(--color);
+  --fs-6: 1.1rem;
+  font-weight: 620;
+  transition: var(--transition-1);
+}
+
+.navbar-list {
+  display: flex;
+  gap: 10px;
+}
+
+a{
+  text-decoration: none;
+}
+
+.pc, .shop{
+  display: none;
+}
+
+.celular{
+  display: inline-block;
+}
+
+@media (max-width: 400px){
+  .navbar1 {
+    max-width: 400px;
+    left: -400px;
+  }
+  .navbar1.active {
+    transform: translateX(400px);
+  }
+  .shop{
+    display: inline-block;
+    padding: 0px 15px;
+  }
+  .celular{
+    display: none;
+  }
+}
+@media (max-width: 601px){
+  .inputBuscar{
+    display: none;
+  }
+}
+
+@media (min-width: 601px){
+  .inputBuscarCelular{
+    display: none;
+  }
+}
+
+@media (max-width: 991px){
+  .navbar-list {
+    gap: 1rem;
+    flex-direction: column;
+  }
+  .user_cel{
+    display: inline-block !important;
+    color: var(--color);
+    --fs-6: 1.1rem;
+    font-weight: 620;
+    transition: var(--transition-1);
+    font-size: var(--fs-6);
+    padding: 0px 15px;
+  }
+  .ocultar{
+    display: none;
+  }
+  .ocultarC{
+    margin: 0;
+    display: inline-block;
+  }
+}
+
+@media (min-width: 992px) {
+  .user_cel, .ocultarC{
+    display: none !important;
+  }
+  .pc{
+    display: inline-block;
+  }
+  .header {
+    --color: var(--black);
+    background: none;
+  }
+  a{
+    color: var(--black) !important;
+  }
+  .header.active a, .opneMenu a{
+    color: var(--black) !important;
+  }
+  .header.active, .opneMenu {
+    --color: var(--black);
+    background-color: var(--white);
+  }
+  .header .logo, .header .action-btn{
+    color: var(--color);
+  }
+  .nav-toggle-btn, .navbar-action-btn {
+    display: none;
+  }
+  .logo {
+    font-size: 2.4rem;
+  }
+  .navbar1, .navbar1.active{
+    all: unset;
+  }
+  .containerDv {
+    padding-inline: 30px;
+  }
+  .header .logo, .header .action-btn {
+    color: var(--color);
+  }
+  .header .action-btn.user {
+    display: block;
+  }
+}

@@ -1,0 +1,158 @@
+.sectionP{
+  padding-block: var(--section-padding);
+}
+.sectionC{
+  margin-bottom: 5rem;
+}
+
+.product-card{
+  text-decoration: none;
+  color: inherit;
+}
+
+.h2 {
+  font-size: var(--fs-2);
+}
+.h2, .h3 {
+  color: var(--eerie-black);
+}
+
+.grid-list, .grid-list2, .grid-list3 {
+  display: grid;
+  gap: 30px;
+  padding-inline: 1rem;
+}
+
+.grid-list3 li{
+  display: flex;
+  justify-content: center;
+}
+
+.card-content .wrapper {
+  justify-content: start;
+  align-items: center;
+  gap: 5px;
+  color: var(--silver-chalice);
+  font-size: var(--fs-7);
+}
+.card-content :is(.wrapper, .rating-wrapper) {
+  display: flex;
+}
+.card-content .rating-wrapper {
+  color: var(--amber);
+  gap: 2px;
+}
+.card-content :is(.wrapper, .rating-wrapper) {
+  display: flex;
+}
+
+.service-card .card-title{
+  margin-block: 10px;
+}
+
+.grid-list2 li{
+  display: flex;
+  justify-content: center;
+}
+
+li{
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+}
+
+.h3 {
+  font-size: var(--fs-3);
+}
+
+.btn {
+  background-color: var(--primary-color);
+  color: var(--contrast-ligth-color);
+  border: none;
+  width: 75%;
+}
+
+.containerC{
+  padding-inline: 15px;
+}
+
+.h4 {
+  font-size: var(--fs-4);
+}
+li{
+  list-style: none;
+}
+
+.h3 {
+  font-size: var(--fs-3);
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.loader {
+  border: 6px solid #e3e3e3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+.loader-text {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  color: #444;
+  text-align: center;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 370px) {
+  .img-holder img{
+    width: 100%;
+  }
+}
+
+@media (min-width: 371px) {
+  .grid-list, .grid-list3 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .divBtn{
+    display: flex;
+    justify-content: center;
+  }
+  .img-holder img{
+    width: 360px;
+    height: 360px;
+  }
+}
+@media (min-width: 790px){
+  .grid-list2, .grid-list3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 992px) {
+  .containerP {
+    padding-inline: 30px;
+  }
+  .grid-list2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1220px) {
+  .grid-list2 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
