@@ -21,7 +21,8 @@ class ProductController extends Controller
                 if (count($parts) === 2) {
                     $key = $parts[0];
                     $value = $parts[1];
-                    $items = Product::where("attributes.$key", $value)->get();
+                    $items = Product::where($key, $value)->get();
+                    Log::info('✅ ' . $items->count() . " productos obtenidos con filtro $key:$value.");
                     return response()->json($items);
                 }
             }
