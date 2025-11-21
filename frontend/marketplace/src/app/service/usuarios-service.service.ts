@@ -81,7 +81,6 @@ export class UsuariosService {
         "password": user.pass,
         "identificacion": user.iden,
         "isSeller": false,
-        "telefono": "",
         "productosVenta": [],
         "domicilio": [],
       }
@@ -101,23 +100,34 @@ export class UsuariosService {
 
   async Actualizar(user: any){
     try {
-      let userData = {}
+      interface UserData {
+        name?: string;
+        email?: string;
+        password?: string;
+        telefono?: string;
+        isSeller?: boolean;
+        domicilio?: any
+      }
+      let userData: UserData = {
+        name: user.name,
+        email: user.email,
+        isSeller: user.isSeller,
+      };
+
       if ('password' in user){
-        if (user.password === ''){
-          userData = {
-            "name": user.name,
-            "email": user.email,
-            "telefono": user.telefono,
-            "isSeller": user.isSeller,
-          }
-        }else{
-          userData = {
-            "name": user.name,
-            "email": user.email,
-            "password": user.password,
-            "telefono": user.telefono,
-            "isSeller": user.isSeller,
-          }
+        userData = {
+          name: user.name,
+          email: user.email,
+          isSeller: user.isSeller,
+        };
+        // Solo agregar password si no está vacío
+        if (user.password !== '') {
+          userData.password = user.password
+        }
+
+        // Solo agregar telefono si no está vacío
+        if (user.telefono !== '') {
+          userData.telefono = user.telefono;
         }
       }else{
         userData = {
